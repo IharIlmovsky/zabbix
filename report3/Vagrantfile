@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# online documentation at https://docs.vagrantup.com.
+Vagrant.configure(2) do |config|  
+  config.vm.box = "zabbix1"
+
+  config.vm.define :vm1 do |vm1| 
+    vm1.vm.hostname = "zclient"
+#    vm1.vm.network "forwarded_port", guest: 8080, host: 8080
+#    vm1.vm.synced_folder "/home/Ihar_Ilmovsky", "/ext"
+    vm1.vm.network :private_network, ip: "192.168.56.10"
+#    vm1.vm.provision "shell", path: "script_name.sh"
+    vm1.vm.provider :virtualbox do |vh1|
+      vh1.name = "zclient" 
+      vh1.customize ["modifyvm", :id, "--memory", 1536]
+      vh1.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end 
+  end 
+
+  config.vm.define :vm2 do |vm2| 
+    vm2.vm.hostname = "zserver"
+#    vm2.vm.network "forwarded_port", guest: 8080, host: 8080
+#    vm2.vm.synced_folder "/home/Ihar_Ilmovsky", "/ext"
+    vm2.vm.network :private_network, ip: "192.168.56.101"
+#    vm2.vm.provision "shell", path: "script_name.sh"
+    vm2.vm.provider :virtualbox do |vh2|
+      vh2.name = "zserver"
+      vh2.customize ["modifyvm", :id, "--memory", 3072]
+      vh2.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end 
+  end 
+
+#
+# provisioning section
+#
+# config.vm.provision "shell", inline: <<-SHELL
+# config.vm.provision "shell", path: "script2.sh"
+# SHELL
+end # End Of Vagrand
